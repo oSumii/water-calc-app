@@ -1,54 +1,40 @@
 "use client"
+// ♥ ILY claire ♥
 
-import { strict } from "assert";
-import { Span } from "next/dist/trace";
-/**
- * erstensssssss, es soll mir ausrechnen wie viel wasser ich am tag trinken soll
- * 
- * zweitenssssss, ich soll eingeben können wie viel ich breits getrunken habe,
- *                und ob ich noch mehr trinken muss oder nicht
- * 
- * dritensssssss, soll *cute* aussehen :3
- */
+import { calcHowMuchWaterPerKg } from "@/lib/utils"
+import { useId, useState } from "react"
 
-import { useRef, useState } from "react";
+const defaultStyles = "border border-pink-700/70 bg-pink-800/70 text-pink-50 px-3 py-1.5 rounded-lg "
 
+export default function WaterCalculator() {
+  const inputId = useId()
+  const [resultWaterNeeded, setResultWaterNeeded] = useState<string | undefined>()
 
-export default function Home() {
-  const irgendwas = "2 cuties";
-  const [counter, setCounter] = useState(0)
-  const [unterschrift, setUnterschrift] = useState("")
-  const inputRef = useRef<HTMLInputElement>(null)
+  function onClick() {
+    const weightInKG = parseInt(
+      (document
+        .getElementById(inputId) as unknown as {value:string})
+        .value)
+    if(isNaN(weightInKG) || weightInKG <= 0) {
 
-  const onSubmit = (): void => {
-    const inputElement = inputRef.current;
-    const value = inputElement?.value
-    if(!value){
-      alert("ALARMMM ALARRMM keine unterschift!!1! betüger!!!")
+      alert("Invalid input")
       return
-    } 
-    setUnterschrift(value);
+    }
+    const resultNeededWater = calcHowMuchWaterPerKg(weightInKG)
+    resultNeededWater
+    setResultWaterNeeded(resultNeededWater)
   }
 
   return (
-    <div className="flex flex-col gap-1 text-9xl " >
-      <span>
-        hier sind
-      </span>
-      <span>
-        {irgendwas}
-      </span>
-      <button onClick={()=>{setCounter(counter+1)}} className="border-dashed border-pink-500 border-10" >
-        Ja claire ist cute :3
-      </button>
-      <span>
-        {counter} {"mal geprüft"}
-      </span>
-      <input type="text" ref={inputRef} />
-      <button onClick={onSubmit}>
-        Unterschreiben
-      </button>
-      {unterschrift && <span>unterschrieben</span> }
+    <div>
+      <div className={defaultStyles + "p-4 flex flex-col gap-2 max-w-max text-center bg-pink-900/40"}>
+        <div className="flex gap-2 items-center">
+          <input id={inputId} type="number" placeholder="Enter your weight in Kg" className="border border-pink-700/70 bg-pink-800/20 text-pink-50 px-3 py-1.5 rounded-lg outline-0"/>
+          <button onClick={onClick} className={defaultStyles + "hover:bg-pink-500/40 active:bg-pink-900/30 hover:text-pink-100"}>Calculate</button>
+        </div>
+        <div className={defaultStyles}>{resultWaterNeeded || "Not yet calculated."}</div>
+        <div className={defaultStyles + "mt-10"}>ILY CLAIREEEE</div>
+      </div>
     </div>
-  );
+  )
 }
