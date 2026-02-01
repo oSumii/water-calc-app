@@ -26,7 +26,7 @@ export default function WaterCalculator() {
   }
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col justify-center items-center">
       <div className={defaultStyles + "p-4 flex flex-col gap-2 max-w-max text-center bg-pink-900/40"}>
         <div className="flex gap-2 items-center">
           <input id={inputId} type="number" placeholder="Enter your weight in Kg" className="border border-pink-700/70 bg-pink-800/20 text-pink-50 px-3 py-1.5 rounded-lg outline-0"/>
